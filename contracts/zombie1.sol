@@ -20,31 +20,38 @@ contract ZombieSurvive is ZombieWeapons {
     }
 
     mapping (uint => address) IdToUser;
-    mapping (address => uint) OwnerToId
+    mapping (address => uint) OwnerToId;
+    mapping (address => uint) OwnerIdCount;
 
     
 
     Player[] public players;
     function createPlayer(string memory _name, string memory _class) external {
+
         if (keccak256(abi.encodePacked(_class)) == keccak256(abi.encodePacked("melee"))) {
             players.push(Player(_name,100,100,1,true,Class(100,100,100,100)));
             uint id = players.length;
             IdToUser[id] = msg.sender;
+            OwnerToId[msg.sender] = id;
+            OwnerIdCount[msg.sender] ++;
 
         } else {
             players.push(Player(_name,100,100,1,true,Class(80,80,80,80)));
             uint id = players.length;
             IdToUser[id] = msg.sender;
+            OwnerToId[msg.sender] = id;
+            OwnerIdCount[msg.sender] ++;
         }
     }
 
-    function findWeapon(uint _playerId, string _name) external{
+    function findWeapon(uint _playerId, string memory _name) external{
         uint modulus = 100;
         uint success = 80;
-        uint result = _rolldice(modulus, _playerid)
+        uint result = _rolldice(modulus, _playerId);
 
+        address player = IdToUser[_playerId];
         if(result <= success) {
-            _obtainWeapon(_playerId, _name);
+            _obtainWeapon(player, _name);
         }
     }
 
