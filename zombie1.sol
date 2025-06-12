@@ -19,10 +19,7 @@ contract ZombieSurvive is Ownable {
         Class class;
     }
 
-
-
     mapping (uint => address) idToUser;
-    mapping (address => uint) UserToId;
 
     Player[] public players;
     function createPlayer(string memory _name, string memory _class) external {
@@ -36,18 +33,8 @@ contract ZombieSurvive is Ownable {
             uint id = players.length;
             idToUser[id] = msg.sender;
         }
-        
-
-        
-
-
     }
 
-
-
-
-
-    
 
 }
 
