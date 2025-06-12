@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity >=0.5.0;
-import "./ownable.sol";
+import "./zombieRollDice.sol";
 
-contract ZombieWeapons is Ownable{
+
+contract ZombieWeapons is ZombieRollDice{
     struct Weapon {
         uint8 range;
         uint8 damage;
@@ -20,7 +21,7 @@ contract ZombieWeapons is Ownable{
         return(weaponProperties);
     }
 
-    function obtainWeapon(address _playerId,string memory _name) external{
+    function _obtainWeapon(address _playerId,string memory _name) internal{
         require(OwnerWeaponCount[msg.sender] == 0 || OwnerWeaponCount[msg.sender] == 1);
         uint weaponProperties = _weapongenerator(_name);
         uint range = weaponProperties/1000000;
@@ -29,6 +30,7 @@ contract ZombieWeapons is Ownable{
         weapons.push(Weapon(uint8(range), uint8(damage), uint8(durability)));
         uint id = weapons.length;
         WeaponToOwner[id] = _playerId;
+        OwnerWeaponCount[_playerId] ++;
 
     }
 
