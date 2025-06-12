@@ -23,6 +23,7 @@ contract ZombieSurvive is ZombieWeapons {
     mapping (address => uint) OwnerToId;
     mapping (address => uint) OwnerIdCount;
 
+    event PlayerCreated(uint id, string name, string classType);
     
 
     Player[] public players;
@@ -30,17 +31,19 @@ contract ZombieSurvive is ZombieWeapons {
 
         if (keccak256(abi.encodePacked(_class)) == keccak256(abi.encodePacked("melee"))) {
             players.push(Player(_name,100,100,1,true,Class(100,100,100,100)));
-            uint id = players.length;
+            uint id = uint(players.length);
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id;
             OwnerIdCount[msg.sender] ++;
+            emit PlayerCreated(id, _name, _class);
 
         } else {
             players.push(Player(_name,100,100,1,true,Class(80,80,80,80)));
-            uint id = players.length;
+            uint id = uint(players.length);
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id;
             OwnerIdCount[msg.sender] ++;
+            emit PlayerCreated(id, _name, _class);
         }
     }
 
