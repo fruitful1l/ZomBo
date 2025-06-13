@@ -18,7 +18,9 @@ contract ZombieSurvive is ZombieWeapons {
         uint8 water;
         uint32 level;
         bool alive;
+        bool busy;
         Class class;
+        Weapon weapon;
     }
 
     mapping (uint => address) IdToUser;
@@ -26,14 +28,14 @@ contract ZombieSurvive is ZombieWeapons {
     mapping (address => uint) OwnerIdCount;
 
     event PlayerCreated(uint id, string name, string classType);
-    event Victory(string result);
+    event Victory(string result, uint enemy, uint player);
     event Players(Player[] players);
 
     Player[] public players;
     function createPlayer(string memory _name, string memory _class) external {
 
         if (keccak256(abi.encodePacked(_class)) == keccak256(abi.encodePacked("melee"))) {
-            players.push(Player(_name,100,100,1,true,Class(100,100,100,100)));
+            players.push(Player(_name,100,100,1,true,false,Class(100,100,100,100), Weapon(10,10,10)));
             uint id = uint(players.length) - 1;
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id; 
@@ -41,7 +43,7 @@ contract ZombieSurvive is ZombieWeapons {
             emit PlayerCreated(id, _name, _class);
 
         } else {
-            players.push(Player(_name,100,100,1,true,Class(80,80,80,80)));
+            players.push(Player(_name,100,100,1,true,false,Class(80,80,80,80), Weapon(5,5,5)));
             uint id = uint(players.length - 1);
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id;
@@ -62,25 +64,28 @@ contract ZombieSurvive is ZombieWeapons {
         }
     }
     
-    event Test(uint enemy);
     function TakeALook() external{
         
         uint playerId = OwnerToId[msg.sender];
         uint result = _getRoll(playerId);
         if(result == 1) {
-            
+            players[playerId].busy = true;
+            Player memory player = players[playerId];
             Zombie memory enemy = _zombieGen(playerId);
-             
-            
-            if (enemy.health < players[playerId].class.damage) {
-                emit Victory("Zombie defeated!");
-            }
-            else {
-                emit Victory("Zombie has won!");
+            if (enemy.health <= (player.class.damage + player.weapon.damage)) {
+                emit Victory("Victory!!!", (player.class.damage + player.weapon.damage),enemy.health);
+        }
+
+            else{
+                emit Victory("Lose!", (player.class.damage + player.weapon.damage),enemy.health);
             }
 
-        } else {
-            emit Victory("Nothing was found");
+
+            
+            
+
+        }   else {
+            emit Victory("Nothing was found", 0, players[playerId].class.damage);
         }
     }
 

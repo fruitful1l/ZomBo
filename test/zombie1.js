@@ -2,7 +2,7 @@ const ZombieSurvive = artifacts.require("ZombieSurvive");
 
  contract("ZombieSurvive", (accounts) => {
    let[alice,bob] = accounts;
-   /*it("should be able to create a new player", async() => {
+   it("should be able to create a new player", async() => {
         const contractInstance = await ZombieSurvive.new();
         const result = await contractInstance.createPlayer("Monster", "melee", {from: alice});
         assert.equal(result.receipt.status, true);
@@ -16,7 +16,7 @@ const ZombieSurvive = artifacts.require("ZombieSurvive");
         const contractInstance = await ZombieSurvive.new();
         const result = await contractInstance.findWeapon("mama", {from: alice});
         assert.equal(result.receipt.status, true);
-   })*/
+   })
 
    it("should fight the Zombie", async() => {
         const contractInstance = await ZombieSurvive.new();
@@ -26,7 +26,9 @@ const ZombieSurvive = artifacts.require("ZombieSurvive");
 
 
         console.log("=======================================")
-        console.log(result.logs);
+        console.log(result.logs[0].args.enemy.toString());
+        console.log(result.logs[0].args.player.toString());
+        console.log(result.logs[0].args.result);
         console.log("=======================================")
 
         
