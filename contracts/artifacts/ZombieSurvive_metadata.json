@@ -1,0 +1,543 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "previousOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnershipTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "classType",
+						"type": "string"
+					}
+				],
+				"name": "PlayerCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint8",
+								"name": "hunger",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "water",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint32",
+								"name": "level",
+								"type": "uint32"
+							},
+							{
+								"internalType": "bool",
+								"name": "alive",
+								"type": "bool"
+							},
+							{
+								"internalType": "bool",
+								"name": "busy",
+								"type": "bool"
+							},
+							{
+								"components": [
+									{
+										"internalType": "uint32",
+										"name": "energy",
+										"type": "uint32"
+									},
+									{
+										"internalType": "uint32",
+										"name": "weight",
+										"type": "uint32"
+									},
+									{
+										"internalType": "uint32",
+										"name": "damage",
+										"type": "uint32"
+									},
+									{
+										"internalType": "uint8",
+										"name": "health",
+										"type": "uint8"
+									}
+								],
+								"internalType": "struct ZombieSurvive.Class",
+								"name": "class",
+								"type": "tuple"
+							},
+							{
+								"components": [
+									{
+										"internalType": "string",
+										"name": "name",
+										"type": "string"
+									},
+									{
+										"internalType": "uint8",
+										"name": "range",
+										"type": "uint8"
+									},
+									{
+										"internalType": "uint8",
+										"name": "damage",
+										"type": "uint8"
+									},
+									{
+										"internalType": "uint8",
+										"name": "durability",
+										"type": "uint8"
+									}
+								],
+								"internalType": "struct ZombieWeapons.Weapon",
+								"name": "weapon",
+								"type": "tuple"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct ZombieSurvive.Player[]",
+						"name": "players",
+						"type": "tuple[]"
+					}
+				],
+				"name": "Players",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "result",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "enemy",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "player",
+						"type": "uint256"
+					}
+				],
+				"name": "Victory",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "playerId",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "weaponProperties",
+						"type": "uint256"
+					}
+				],
+				"name": "WeaponFound",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "TakeALook",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					}
+				],
+				"name": "changeWeapon",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_class",
+						"type": "string"
+					}
+				],
+				"name": "createPlayer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_name",
+						"type": "string"
+					}
+				],
+				"name": "findWeapon",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					}
+				],
+				"name": "getWeaponsByOwner",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isOwner",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "players",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "hunger",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "water",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint32",
+						"name": "level",
+						"type": "uint32"
+					},
+					{
+						"internalType": "bool",
+						"name": "alive",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "busy",
+						"type": "bool"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint32",
+								"name": "energy",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint32",
+								"name": "weight",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint32",
+								"name": "damage",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint8",
+								"name": "health",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct ZombieSurvive.Class",
+						"name": "class",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint8",
+								"name": "range",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "damage",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint8",
+								"name": "durability",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct ZombieWeapons.Weapon",
+						"name": "weapon",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "weapons",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "range",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "damage",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint8",
+						"name": "durability",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"isOwner()": {
+					"returns": {
+						"_0": "true if `msg.sender` is the owner of the contract."
+					}
+				},
+				"owner()": {
+					"returns": {
+						"_0": "the address of the owner."
+					}
+				},
+				"renounceOwnership()": {
+					"details": "Allows the current owner to relinquish control of the contract."
+				},
+				"transferOwnership(address)": {
+					"details": "Allows the current owner to transfer control of the contract to a newOwner.",
+					"params": {
+						"newOwner": "The address to transfer ownership to."
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"renounceOwnership()": {
+					"notice": "Renouncing to ownership will leave the contract without an owner. It will not be possible to call the functions with the `onlyOwner` modifier anymore."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/zombie1.sol": "ZombieSurvive"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/lookAround.sol": {
+			"keccak256": "0xcd7021af19beeefba2a358b0c6e69b3477d8f43dc047b3d60756a78162b1f234",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f9fd1c0b8b0c4954105be5ffc5b6b98ff565c709798da76ef0c4235a002806e5",
+				"dweb:/ipfs/QmYvDNFiRNbcNzVvVoGWkfF3NmvopctRPGkKRj3ycYdNAD"
+			]
+		},
+		"contracts/ownable.sol": {
+			"keccak256": "0xe3b139661156deaeb762244823423d69febe6e9aaf98e1a47cbbf95a1d3be39d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://04a6e3af018c1e21b2155e91da9905e97a204d656a7e9e5b938431e9cac0a4f4",
+				"dweb:/ipfs/QmWFn5wwQ6qTdXWWbJRqBji8iVgc9bazwsd15iRkP8Dtk8"
+			]
+		},
+		"contracts/zombie1.sol": {
+			"keccak256": "0xa4247b87b318c2f7267b5d981d55ff9348f12a89fb88e688e5b841fdcfcaf609",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e951b58a6d43deee500a8bafc09069f197289fd7a1a9df1d8e1e4622a299ef0",
+				"dweb:/ipfs/QmPxtqstRiHtZ66U77jxat7Ag1ERLSmDA2AB3GUxnMHXku"
+			]
+		},
+		"contracts/zombieRollDice.sol": {
+			"keccak256": "0xd41c369f7ba741d8ef11db32d1c059c16e91e5af05916eb36157e5fc99050393",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5616dd0077802896bdffe1466273b1e7c90aaa7251db41e33799184ffd6debd1",
+				"dweb:/ipfs/QmYanhqUkP9QLxj35FSGnYyWSpPBCiBfFsAd7Y5mwSMtu4"
+			]
+		},
+		"contracts/zombieWeapons.sol": {
+			"keccak256": "0x0c5c4f0de6c6c3377c6ebff9853b233edbddfd73853115b28cf4d8f18a3da471",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e1c10984c7432d35c5f10e30fd6c265f8662c018c39072a0cf2bc5534fc11b0",
+				"dweb:/ipfs/QmdRDThbQ1yZQ5MVZxA5W5rEFiSGBteFRtfGeKQfJ3XWmQ"
+			]
+		}
+	},
+	"version": 1
+}

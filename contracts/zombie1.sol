@@ -77,8 +77,9 @@ contract ZombieSurvive is ZombieWeapons {
     }
 
     function changeWeapon(uint id) external {
+        require(msg.sender == WeaponToOwner[id]);
 
-        players[OwnerToId[msg.sender]].weapon = weapons[id-1];
+        players[OwnerToId[msg.sender]].weapon = weapons[id];
     }
     
     function TakeALook() external{

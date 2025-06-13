@@ -36,7 +36,7 @@ contract ZombieWeapons is LookAround{
         uint damage = weaponProperties / 1000 % 1000;
         uint durability = weaponProperties % 1000;
         weapons.push(Weapon(_name,uint8(range), uint8(damage), uint8(durability)));
-        uint id = weapons.length;
+        uint id = weapons.length - 1;
         WeaponToOwner[id] = _playerId;
         OwnerWeaponCount[_playerId] ++;
         emit WeaponFound(_playerId, _name, weaponProperties);
