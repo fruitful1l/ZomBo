@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT 
 pragma solidity >=0.5.0;
-import "./zombieRollDice.sol";
+import "./lookAround.sol";
 
 
-contract ZombieWeapons is ZombieRollDice{
+contract ZombieWeapons is LookAround{
     struct Weapon {
         uint8 range;
         uint8 damage;
@@ -14,6 +14,8 @@ contract ZombieWeapons is ZombieRollDice{
 
     Weapon[] public weapons;
 
+    event WeaponFound(address playerId, string name, uint weaponProperties);
+
     uint RandNonce = 0;
     function _weapongenerator(string memory _name) internal returns(uint) {
         uint weaponProperties = uint(keccak256(abi.encodePacked(block.timestamp, RandNonce, _name))) % (10**9);
@@ -22,7 +24,7 @@ contract ZombieWeapons is ZombieRollDice{
     }
 
     function _obtainWeapon(address _playerId,string memory _name) internal{
-        require(OwnerWeaponCount[msg.sender] == 0 || OwnerWeaponCount[msg.sender] == 1);
+        
         uint weaponProperties = _weapongenerator(_name);
         uint range = weaponProperties/1000000;
         uint damage = weaponProperties / 1000 % 1000;
@@ -31,6 +33,7 @@ contract ZombieWeapons is ZombieRollDice{
         uint id = weapons.length;
         WeaponToOwner[id] = _playerId;
         OwnerWeaponCount[_playerId] ++;
+        emit WeaponFound(_playerId, _name, weaponProperties);
 
     }
 
