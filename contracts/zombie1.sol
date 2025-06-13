@@ -35,7 +35,7 @@ contract ZombieSurvive is ZombieWeapons {
     function createPlayer(string memory _name, string memory _class) external {
 
         if (keccak256(abi.encodePacked(_class)) == keccak256(abi.encodePacked("melee"))) {
-            players.push(Player(_name,100,100,1,true,false,Class(100,100,100,100), Weapon(10,10,10)));
+            players.push(Player(_name,100,100,1,true,false,Class(100,100,100,100), Weapon('fist',10,10,10)));
             uint id = uint(players.length) - 1;
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id; 
@@ -43,7 +43,7 @@ contract ZombieSurvive is ZombieWeapons {
             emit PlayerCreated(id, _name, _class);
 
         } else {
-            players.push(Player(_name,100,100,1,true,false,Class(80,80,80,80), Weapon(5,5,5)));
+            players.push(Player(_name,100,100,1,true,false,Class(80,80,80,80), Weapon('fist',5,5,5)));
             uint id = uint(players.length - 1);
             IdToUser[id] = msg.sender;
             OwnerToId[msg.sender] = id;
@@ -55,13 +55,30 @@ contract ZombieSurvive is ZombieWeapons {
 
     function findWeapon(string memory _name) external{
         uint modulus = 100;
-        uint success = 80;
+        uint success = 99;
         uint result = _rolldice(modulus, OwnerToId[msg.sender]);
 
         address player = msg.sender;
         if(result <= success) {
             _obtainWeapon(player, _name);
         }
+    }
+
+    function getWeaponsByOwner(address _owner) external view returns(uint[] memory) {
+    uint[] memory result = new uint[](OwnerWeaponCount[_owner]);
+    uint counter = 0;
+    for (uint i = 0; i < weapons.length; i++) {
+      if (WeaponToOwner[i] == _owner) {
+        result[counter] = i;
+        counter++;
+      }
+    }
+    return result;
+    }
+
+    function changeWeapon(uint id) external {
+
+        players[OwnerToId[msg.sender]].weapon = weapons[id-1];
     }
     
     function TakeALook() external{
@@ -74,10 +91,13 @@ contract ZombieSurvive is ZombieWeapons {
             Zombie memory enemy = _zombieGen(playerId);
             if (enemy.health <= (player.class.damage + player.weapon.damage)) {
                 emit Victory("Victory!!!", (player.class.damage + player.weapon.damage),enemy.health);
+                players[playerId].level++;
         }
 
             else{
                 emit Victory("Lose!", (player.class.damage + player.weapon.damage),enemy.health);
+                players[playerId].alive = false;
+                uint timestap = block.timestamp;
             }
 
 
