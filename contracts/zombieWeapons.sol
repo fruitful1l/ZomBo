@@ -6,40 +6,30 @@ import "./lookAround.sol";
 contract ZombieWeapons is LookAround{
     struct Weapon {
         string name;
-        uint8 range;
-        uint8 damage;
-        uint8 durability;
-
+        uint dna;
     }
     mapping (uint => address) WeaponToOwner;
     mapping (address => uint) OwnerWeaponCount;
     
 
     Weapon[] public weapons;
-    mapping (uint => Weapon) WeaponId;
+    
 
     event WeaponFound(address playerId, string name, uint weaponProperties);
 
-    uint RandNonce = 0;
-    function _weapongenerator(string memory _name) internal returns(uint) {
-        uint weaponProperties = uint(keccak256(abi.encodePacked(block.timestamp, RandNonce, _name))) % (10**9);
-        
-        RandNonce++;
+    function _weapongenerator() internal view returns(uint) {
+        uint weaponProperties = uint(keccak256(abi.encodePacked(block.timestamp))) % (10**9);
         
         return(weaponProperties);
     }
 
     function _obtainWeapon(address _playerId,string memory _name) internal{
-        
-        uint weaponProperties = _weapongenerator(_name);
-        uint range = weaponProperties/1000000;
-        uint damage = weaponProperties / 1000 % 1000;
-        uint durability = weaponProperties % 1000;
-        weapons.push(Weapon(_name,uint8(range), uint8(damage), uint8(durability)));
+
+        uint weaponProperties = _weapongenerator();
+        weapons.push(Weapon(_name, weaponProperties));
         uint id = weapons.length - 1;
         WeaponToOwner[id] = _playerId;
-        OwnerWeaponCount[_playerId] ++;
-        emit WeaponFound(_playerId, _name, weaponProperties);
+        OwnerWeaponCount[_playerId]++;
 
     }
 
