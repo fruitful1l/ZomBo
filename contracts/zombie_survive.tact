@@ -1,19 +1,25 @@
 import "./zombie_player.tact";
+import "@stdlib/ownable";
 
-struct Zombie {
-    _dna: Int;
-    _name: String;
-}
 
 message NewPlayer {
-    
+    battleaddr: Address;
 }
 
 message FindWeapon {
     name: String;
 }
 
+fun rollDice(_modulus_min: Int, _modulus: Int): Int{
+    let rand = random(_modulus_min, _modulus);
+    return(rand % _modulus);
+}
 
+
+struct Zombie {
+    _dna: Int;
+    _name: String;
+}
 
 fun zombieGenerator(_name: String): Zombie {
     let dna = rollDice(1000000,9999999);
@@ -24,10 +30,9 @@ fun zombieGenerator(_name: String): Zombie {
 }
 
 
-fun rollDice(_modulus_min: Int, _modulus: Int): Int{
-    let rand = random(_modulus_min, _modulus);
-    return(rand % _modulus);
-}
+
+
+
 
 fun generateWeapon(_name: String): Weapon {
     let weaponAttributes = rollDice(10^4, 10^5);
@@ -36,7 +41,10 @@ fun generateWeapon(_name: String): Weapon {
 
 
 
-contract ZombieSurvive {
+contract ZombieSurvive with Ownable {
+
+    owner: Address = address("EQCObIMiCLlWlEdT9FVPZWz5jAWocxqhu6bYzwtJzEkkhAsa");
+    
     receive() {
     }
     ownerToId: map<Address,Int as uint128> = emptyMap();
@@ -52,22 +60,35 @@ contract ZombieSurvive {
             mode: SendIgnoreErrors, // skip the message in case of errors
             value: ton("1"), // a whole Toncoin
 
-});
+        });
         
         self.ownerToId.set(sender(), self.id);
         self.id += 1;
     }
-kim  
-    receive("heal") {
-        send(SendParameters{ // this will forward excess gas
-            to: contractAddress(initOf ZombiePlayer(self.ownerToId.get(sender())!!, sender(), myAddress())),
-            body: Heal{hp: 10}.toCell(),
-            value: 0, 
-            mode: SendRemainingValue + SendIgnoreErrors 
-        });
 
-        
-    }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+  
+    
+    
+
+
+
+
+
+
+
+
 
     get fun getBalance(): Int {
         return myBalance();
@@ -84,14 +105,6 @@ kim
 
 
 
-    // receive(msg: FindWeapon) {
-    //     require(self.OwnerWeaponCount.get(sender()) == 0, "Not enough hands!");
-
-    //     newWeapon: Weapon = generateWeapon(msg.name);
-    //     //Function For Weapon Contract Deployment
-    //     self.weaponToOwner.set(self.weaponId, sender());
-    
-    // }
 
 
 
