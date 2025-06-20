@@ -15,7 +15,7 @@ struct Player {
     weapon: Weapon;
     }
 
-contract ZombiePlayer {
+contract ZombiePlayer  {
     playerId: Int;
     master: Address;
     playerHero: Player;
@@ -37,8 +37,18 @@ contract ZombiePlayer {
         }
     }
 
+    receive(){
+
+    }
 
 
+    get fun getHealth(): Int {
+        return self.playerHero.health;
+    }
+
+    receive(msg: Heal) {
+        self.playerHero.health += msg.hp;
+    }
     
 
 

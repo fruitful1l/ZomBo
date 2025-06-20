@@ -1,5 +1,4 @@
 import "./zombie_player.tact";
-import "@stdlib/deploy";
 
 struct Zombie {
     _dna: Int;
@@ -25,7 +24,6 @@ fun zombieGenerator(_name: String): Zombie {
 }
 
 
-
 fun rollDice(_modulus_min: Int, _modulus: Int): Int{
     let rand = random(_modulus_min, _modulus);
     return(rand % _modulus);
@@ -37,9 +35,9 @@ fun generateWeapon(_name: String): Weapon {
 }
 
 
+
 contract ZombieSurvive {
     receive() {
-        cashback(sender());
     }
     ownerToId: map<Address,Int as uint128> = emptyMap();
     id: Int as uint32 = 0;
@@ -49,14 +47,17 @@ contract ZombieSurvive {
 
     receive(msg: NewPlayer) {
         deploy(DeployParameters {
-            init: initOf ZombiePlayer(self.id, sender(), myAddress()),
-            value: ton("0.5")
-        });
+            // bounce is set to true by default
+            init: initOf ZombiePlayer(self.id, sender(), myAddress()), // initial code and data
+            mode: SendIgnoreErrors, // skip the message in case of errors
+            value: ton("1"), // a whole Toncoin
+
+});
         
         self.ownerToId.set(sender(), self.id);
         self.id += 1;
     }
-
+kim  
     receive("heal") {
         send(SendParameters{ // this will forward excess gas
             to: contractAddress(initOf ZombiePlayer(self.ownerToId.get(sender())!!, sender(), myAddress())),
@@ -68,7 +69,11 @@ contract ZombieSurvive {
         
     }
 
+    get fun getBalance(): Int {
+        return myBalance();
+    }
 
+    
 
 
 
