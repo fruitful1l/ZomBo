@@ -1,3 +1,5 @@
+import "./zombie_battle.tact";
+
 message Heal {
     hp: Int;
 }
@@ -8,12 +10,7 @@ struct Weapon {
     damage: Int;
 }
 
-message GoOut {
-    id: Int as uint128;
-    hp: Int;
-    damage: Int;
-    weapon: Weapon;
-}
+
 
 
 struct Player {
@@ -28,6 +25,8 @@ contract ZombiePlayer  {
     master: Address;
     playerHero: Player;
     owner: Address;
+    busy: Bool = false;
+
     init(_id: Int, owner: Address, master:Address){
         self.master = master;
         self.playerId = _id;
@@ -53,19 +52,17 @@ contract ZombiePlayer  {
         return self.playerHero.health;
     }
 
-    receive(msg: GoOut) {
-        message(MessageParameters {
-            to: self.master,
-            value: ton("0.005"),
-            body: GoOut {
-                id: self.playerId,
-                hp: self.playerHero.health,
-                damage: self.playerHero.damage,
-                weapon: self.playerHero.weapon
-            }.toCell(),
+    receive("GoOut") {
+        deploy(DeployParameters {
+            init: initOf ZombieBattle((self.playerHero.damage+self.playerHero.weapon.damage), self.playerHero.weapon.range, self.playerHero.energy, self.playerHero.health, myAddress()), // initial code and data
+            mode: SendIgnoreErrors, // skip the message in case of errors
+            value: ton("0.05"),
+            
+        });
+        
             
 
-        });
+        
     }
 
 
